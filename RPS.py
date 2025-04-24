@@ -1,46 +1,57 @@
 import random
-#helper turns 1/2/3 into strings
+
+# map numbers to names
 CHOICE_NAMES = {
-  1: "rock",
-  2: "paper",
-  3: "scissors"
+    1: "Rock",
+    2: "Paper",
+    3: "Scissors"
 }
 
-  
-#This will determine whether a draw has occured, and if no draw is found will determine the winner
-def determine_winner (user, bot):
-  if user == bot:
+def determine_winner(user_choice, bot_choice):
+    """Return 'user' if the user wins, 'bot' if the bot wins, or None on draw."""
+    # draw
+    if user_choice == bot_choice:
         return None
-  #rock (1) beats scissors(3), paper(2) beats rock(1) and scissors(3) beats paper(2)
-  wins = {
-    (1, 3)
-    (2, 1)
-    (3, 2)
-  }
-  return "user" if (user, bot) in wins else "bot"
+
+    # winning combinations: (winner, loser)
+    wins = {
+        (1, 3),  # Rock beats Scissors
+        (2, 1),  # Paper beats Rock
+        (3, 2),  # Scissors beats Paper
+    }
+
+    return "user" if (user_choice, bot_choice) in wins else "bot"
 
 def rock_paper_scissors():
-  while True:
-  #Player picks a input and this is used by the player 
-    try:
-        user_choice = int((input)("Choose 1 for rock, 2 for paper and 3 for scissors: "))
-        if user_choice not in CHOICE_NAMES: raise ValueError
-    except ValueError:
-        print("Invalid choice. Please enter 1, 2 or 3. \n")
-        continue
-    print(f"You chose {CHOICE_NAMES[user_choice]}")
-    
-    bot_choice = random.randint (1,3)
-    print(f"Bot chose {CHOICE_NAMES[bot_choice]}")
+    """Play one round of Rock-Paper-Scissors (replay on draw)."""
+    while True:
+        # get & validate user input
+        try:
+            user_choice = int(input("Choose 1 for Rock, 2 for Paper, 3 for Scissors: "))
+            if user_choice not in CHOICE_NAMES:
+                raise ValueError
+        except ValueError:
+            print("Invalid choice. Please enter 1, 2, or 3.\n")
+            continue
 
-    result = determine_winner(user_choice, bot_choice)
-    if result is None:
-        print("It's a draw! Let's go again.\n")
-        continue
-    elif result == "user":
-       print("🎉 You win!")
-    else:
-       print("😢 Bot wins!")
-    break
+        print(f"\nYou chose {CHOICE_NAMES[user_choice]}")
+
+        # bot picks
+        bot_choice = random.randint(1, 3)
+        print(f"Bot chose {CHOICE_NAMES[bot_choice]}")
+
+        # decide
+        result = determine_winner(user_choice, bot_choice)
+        if result is None:
+            print("It's a draw! Let's play again.\n")
+            continue
+        elif result == "user":
+            print("🎉 You win!")
+        else:
+            print("😢 Bot wins!")
+        break
+
 if __name__ == "__main__":
-   rock_paper_scissors()
+    print("Welcome to Rock-Paper-Scissors!\n")
+    rock_paper_scissors()
+    print("Thanks for playing!")
